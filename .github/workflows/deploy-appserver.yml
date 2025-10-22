@@ -1,0 +1,32 @@
+name: Deploy via EC2
+
+on:
+  push:
+    branches:
+      - main    # <== Pas aan als je bv. 'master' of 'develop' gebruikt
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup SSH access
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Trigger deployment on EC2
+        run: |
+          ssh ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            # 👇 PAS DIT AAN NAAR DE MAP VAN JOUW REPO OP DE EC2
+            cd /home/ubuntu/devops-project/dotnet-2526-gent7
+
+            echo "Pulling latest changes..."
+            git pull origin main    # <== Pas branch aan indien anders
+
+            echo "Running Ansible playbook..."
+            cd /home/ubuntu/devops-project/ops-2526-gent7/src/local/ansible
+            ansible-playbook -i inventory.yml playbooks/appserver.yml -l appserver  # <== Pas pad aan indien nodig
+          EOF
