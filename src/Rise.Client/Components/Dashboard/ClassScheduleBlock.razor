@@ -1,0 +1,14 @@
+<div class="class-schedule-block">
+  <DateBlock Date="@Course.Start" MonthFormat="ddd" />
+  <div class="class-schedule-info">
+     <p>@Course.Start.ToString("H.mm") - @Course.End.ToString("H.mm")</p>
+     <h2>@Course.Course</h2>
+     <p>@Course.Room</p>
+     <p>@Course.Type</p>
+  </div>
+</div>
+
+@code {
+    [Parameter]
+    public (string Course, DateTime Start, DateTime End, string Room, string Type) Course { get; set; }
+}

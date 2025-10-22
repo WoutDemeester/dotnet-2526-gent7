@@ -1,0 +1,110 @@
+@using Microsoft.AspNetCore.Components.Routing
+@inject NavigationManager Navigation
+
+<div>
+    <MudIconButton Icon="@CurrentIcon"
+                   Color="Color.Inherit"
+                   OnClick="ToggleMenu"
+                   Class="hamburger-btn" />
+    @if (IsMenuOpen)
+    {
+        <div class="hamburger-fullscreen">
+            <div class="hamburger-header">
+                <img src="HOGENT_Logo_Wit.png" alt="HOGENT logo" style="height:38px;" />
+                <MudSpacer />
+                <div class="header-icons">
+                    <MudIconButton Href="notificaties" Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Close" Color="Color.Inherit" OnClick="ToggleMenu" />
+                </div>
+            </div>
+            <div class="hamburger-body">
+                <MudNavLink Href="/instellingen" Class="menu-link"><p>App instellingen</p></MudNavLink>
+                <MudNavLink Href="/it-support" Class="menu-link"><p>IT-Support</p></MudNavLink>
+                <MudNavLink Href="/contact" Class="menu-link"><p>Contact & Hulp</p></MudNavLink>
+                <AuthorizeView>
+                    <Authorized>
+                        <MudButton Href="logout" StartIcon="@Icons.Material.Filled.Logout" Class="logout-btn">Uitloggen</MudButton>
+                    </Authorized>
+                    <NotAuthorized>
+                        <MudButton Href="login" StartIcon="@Icons.Material.Filled.Login" Class="logout-btn">Login</MudButton>
+                    </NotAuthorized>
+                </AuthorizeView>
+                <div class="language-switch">
+                    <span><b>NL</b></span> | <span>EN</span>
+                </div>
+            </div>
+            @*
+            <div class="hamburger-content mud-elevation-3 mud-paper">
+                <MudIconButton Icon="@Icons.Material.Filled.Close"
+                               Color="Color.Inherit"
+                               OnClick="ToggleMenu"
+                               Class="close-btn"/>
+
+                <div class="menu-items">
+                    <MudNavLink Href="/instellingen" Class="menu-navlink">
+                        <p>App instellingen</p></MudNavLink>
+                    <MudNavLink Href="/it-support" Class="menu-navlink">
+                        <p>IT-Support</p></MudNavLink>
+                    <MudNavLink Href="/contact" Class="menu-navlink">
+                        <p>Contact & hulp</p></MudNavLink>
+                </div>
+
+                <div class="hamburger-bottom-content">
+                    <AuthorizeView>
+                        <Authorized>
+                            <MudButton Href="logout" StartIcon="@Icons.Material.Filled.Logout" Class="bottom-button">Logout</MudButton>
+                        </Authorized>
+                        <NotAuthorized>
+                            <MudButton Href="login"
+                                       Color="Color.Inherit"
+                                       StartIcon="@Icons.Material.Filled.Login"
+                                       Style="font-size: xx-large; text-transform: none"
+                                       Class="bottom-button">
+                                Login
+                            </MudButton>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                </div>
+
+                <div class="language-section">
+                    <span>NL</span> | <span>EN</span>
+                </div>
+            </div> *@
+        </div>
+    }
+</div>
+
+@code {
+    private bool IsMenuOpen = false;
+    private string CurrentIcon => IsMenuOpen ? Icons.Material.Filled.Close : Icons.Material.Filled.Menu;
+
+    private void ToggleMenu() => IsMenuOpen = !IsMenuOpen;
+
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += (_, __) =>
+        {
+            IsMenuOpen = false;
+            InvokeAsync(StateHasChanged);
+        };
+    }
+    
+    /*
+    protected override void OnInitialized()
+    {
+        Navigation.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        // Sluit het menu bij navigatie
+        IsMenuOpen = false;
+        InvokeAsync(StateHasChanged);
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+    */
+}

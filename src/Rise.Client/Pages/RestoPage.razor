@@ -1,0 +1,193 @@
+﻿@page "/resto"
+
+@using MudBlazor
+
+<PageTitle>Restaurant</PageTitle>
+
+@* DESKTOP *@
+<MudHidden Breakpoint="Breakpoint.MdAndDown">
+    <div style="margin: 3rem;">
+        <h1 style="font-size: 55px; font-weight: 700; padding-top: 20px;">Restaurant</h1>
+        <h2 style="font-size: 35px; font-weight: 600; margin-bottom: 15px;">Weekmenu (@MondayDate.ToString("dd/MM"))</h2>
+
+        <MudSelect T="string" Label="Kies restaurant" @bind-Value="GeselecteerdeResto" Dense="true" Class="mb-2" Style="min-width:200px">
+            <MudSelectItem Value="@((string?)null)">-- Selecteer een restaurant --</MudSelectItem>
+            @foreach (var resto in Restos)
+            {
+                <MudSelectItem Value="@resto">@resto</MudSelectItem>
+            }
+        </MudSelect>
+
+        @if (!string.IsNullOrEmpty(GeselecteerdeResto))
+        {
+            <MudPaper Elevation="1" Class="pa-1" Style="border: 1px solid #e0e0e0; border-radius: 8px; background: #fafafa; margin: 10px 0;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span style="display: flex; align-items: center; gap: 0.3rem; font-size: 14px;">
+                        <MudIcon Icon="@Icons.Material.Filled.ExpandMore" Style="color: #A3C47C; " Size="Size.Small" />
+                        veggie &amp; halal
+                    </span>
+                    <span>&middot;</span>
+                    <span style="display: flex; align-items: center; gap: 0.3rem;">
+                        <span style="background: #A3C47C; border-radius: 50%; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; font-size: 14px;">
+                            <MudIcon Icon="@Icons.Material.Filled.ExpandMore" Style="color: white;" Size="Size.Small" />
+                        </span>
+                        vegan &amp; halal
+                    </span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; font-size: 14px;">
+                    <MudIcon Icon="@Icons.Material.Filled.Info" Color="Color.Dark" Size="Size.Small" />
+                    <span>Allergenen? Vraag meer info bij de medewerkers</span>
+                </div>
+            </MudPaper>
+
+            <h3 style="font-size: 22px; padding: 8px 0">Menu voor <span style="font-weight: bold;"> @GeselecteerdeResto</span></h3>
+
+            <MudTabs MinimumTabWidth="72px" Style="--mud-tab-min-width:72px;">
+                @if (RestoMenusStructured.TryGetValue(GeselecteerdeResto, out var menu))
+                {
+                    @foreach (var pair in menu.Items)
+                    {
+                        <MudTabPanel Text="@pair.Key" Style="padding: 12px 0">
+                            @if (pair.Value != null && pair.Value.Any(e => !string.IsNullOrWhiteSpace(e.Description)))
+                            {
+                                @foreach (var group in pair.Value
+                                                .Where(e => !string.IsNullOrWhiteSpace(e.Description))
+                                                .GroupBy(e => e.FoodCategory))
+                                {
+                                    <div style="display: grid; grid-template-columns: 140px 1fr; border-radius: 8px; overflow: hidden; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); background: #fafbfc;">
+                                        <div style="background: #27272f; color: white; display: flex; align-items: center; justify-content: flex-start; font-weight: 600; font-size: 15px; min-height: 100%; padding: 12px 8px;">
+                                            @group.Key
+                                        </div>
+                                        <div style="padding: 4px 6px;">
+                                            <MudList T="MenuEntry" Dense="true" Style="padding:0;">
+                                                @foreach (var entry in group)
+                                                {
+                                                    <MudListItem Style="min-height:10px; padding:2px 0;">
+                                                        <div style="display: flex; align-items: center;">
+                                                            <MudText Style="font-size: 14px;">@entry.Description</MudText>
+                                                            @if (entry.IsVeganAndHalal)
+                                                            {
+                                                                <MudIcon Icon="@Icons.Material.Filled.ExpandMore" Style="color: white; margin-left:4px; background-color: #A3C47C; border-radius: 50%;" Size="Size.Small" />
+                                                            }
+                                                            @*@if (entry.IsVeggie)
+                                                            {
+                                                                <MudIcon Icon="@Icons.Material.Filled.ExpandMore" Style="color: #A3C47C; margin-left:4px;" Size="Size.Small" />
+                                                            }
+                                                            *@
+                                                        </div>
+                                                    </MudListItem>
+                                                }
+                                            </MudList>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p>Geen menu voor @pair.Key.</p>
+                            }
+                        </MudTabPanel>
+                    }
+                }
+                else
+                {
+                    <MudTabPanel Text="Ma"><p>Geen menu gevonden voor deze restaurant.</p></MudTabPanel>
+                }
+            </MudTabs>
+        }
+    </div>
+</MudHidden>
+
+@* MOBILE *@
+<MudHidden Breakpoint="Breakpoint.LgAndUp">
+    <div style="margin:1rem;">
+        <h1 style="font-size: 35px; font-weight: 700; padding-top: 20px;">Restaurant</h1>
+        <h2 style="font-size: 25px; font-weight: 600; margin-bottom: 15px;">Weekmenu (@MondayDate.ToString("dd/MM"))</h2>
+
+        <MudSelect T="string" Label="Kies restaurant" @bind-Value="GeselecteerdeResto" Dense="true" Class="mb-2" Style="min-width:200px">
+            <MudSelectItem Value="@((string?)null)">-- Selecteer een restaurant --</MudSelectItem>
+            @foreach (var resto in Restos)
+            {
+                <MudSelectItem Value="@resto">@resto</MudSelectItem>
+            }
+        </MudSelect>
+
+        @if (!string.IsNullOrEmpty(GeselecteerdeResto))
+        {
+            <MudPaper Elevation="1" Class="pa-1" Style="border: 1px solid #e0e0e0; border-radius: 8px; background: #fafafa; margin: 10px 0;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <span style="display: flex; align-items: center; gap: 0.3rem; font-size: 14px;">
+                        <MudIcon Icon="@Icons.Material.Filled.ExpandMore" Style="color: #A3C47C; " Size="Size.Small" />
+                        veggie &amp; halal
+                    </span>
+                    <span>&middot;</span>
+                    <span style="display: flex; align-items: center; gap: 0.3rem;">
+                        <span style="background: #A3C47C; border-radius: 50%; display: flex; align-items: center; justify-content: center; width: 24px; height: 24px; font-size: 14px;">
+                            <MudIcon Icon="@Icons.Material.Filled.ExpandMore" Style="color: white;" Size="Size.Small" />
+                        </span>
+                        vegan &amp; halal
+                    </span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-top: 0.5rem; font-size: 14px;">
+                    <MudIcon Icon="@Icons.Material.Filled.Info" Color="Color.Dark" Size="Size.Small" />
+                    <span>Allergenen? Vraag meer info bij de medewerkers</span>
+                </div>
+            </MudPaper>
+
+            <h3 style="font-size: 22px; padding: 8px 0">Menu voor <span style="font-weight: bold;"> @GeselecteerdeResto</span></h3>
+
+            <MudTabs MinimumTabWidth="72px" Style="--mud-tab-min-width:72px;">
+                @if (RestoMenusStructured.TryGetValue(GeselecteerdeResto, out var menu))
+                {
+                    @foreach (var pair in menu.Items)
+                    {
+                        <MudTabPanel Text="@pair.Key" Style="padding: 12px 0">
+                            @if (pair.Value != null && pair.Value.Any(e => !string.IsNullOrWhiteSpace(e.Description)))
+                            {
+                                @foreach (var group in pair.Value
+                                            .Where(e => !string.IsNullOrWhiteSpace(e.Description))
+                                            .GroupBy(e => e.FoodCategory))
+                                {
+                                    <div style="display: grid; grid-template-columns: 120px 1fr; border-radius: 8px; overflow: hidden; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); background: #fafbfc;">
+                                        <div style="background: #27272f; color: white; display: flex; align-items: center; justify-content: flex-start; font-weight: 600; font-size: 15px; min-height: 100%; padding: 12px 8px;">
+                                            @group.Key
+                                        </div>
+                                        <div style="padding: 4px 6px;">
+                                            <MudList T="MenuEntry" Dense="true" Style="padding:0;">
+                                                @foreach (var entry in group)
+                                                {
+                                                    <MudListItem Style="min-height:10px; padding:2px 0;">
+                                                        <div style="display: flex; align-items: center;">
+                                                            <MudText Style="font-size: 14px;">@entry.Description</MudText>
+                                                            @if (entry.IsVeganAndHalal)
+                                                            {
+                                                                <MudIcon Icon="@Icons.Material.Filled.ExpandMore" Style="color: white; margin-left:4px; background-color: #A3C47C; border-radius: 50%;" Size="Size.Small" />
+                                                            }
+                                                           @* @if (entry.IsVeggie)
+                                                            {
+                                                                <MudIcon Icon="@Icons.Material.Filled.ExpandMore" Style="color: #A3C47C; margin-left:4px;" Size="Size.Small" />
+                                                            }
+                                                            *@
+                                                        </div>
+                                                    </MudListItem>
+                                                }
+                                            </MudList>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <p>Geen menu voor @pair.Key.</p>
+                            }
+                        </MudTabPanel>
+                    }
+                }
+                else
+                {
+                    <MudTabPanel Text="Ma"><p>Geen menu gevonden voor deze restaurant.</p></MudTabPanel>
+                }
+            </MudTabs>
+        }
+    </div>
+</MudHidden>

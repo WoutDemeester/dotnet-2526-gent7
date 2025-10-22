@@ -1,0 +1,148 @@
+.deadline-card {
+    background-color: #fff;
+    overflow: hidden;
+    position: relative;
+    transition: box-shadow 0.3s ease-in-out, opacity 0.5s ease-out; 
+}
+
+.deadline-card.expanded {
+    border-color: #FABC32;
+}
+
+.deadline-card.completing {
+    opacity: 0;
+}
+
+.event-content {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.deadline-info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    width: 100%;
+}
+
+.deadline-info p {
+    color: #BDBDC1;
+    margin-bottom: 0;
+}
+
+.deadline-info h3 {
+    margin-bottom: 0;
+}
+
+.deadline-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.deadline-description {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+}
+
+.deadline-card.expanded .deadline-description {
+    max-height: none;
+    padding-top: 20px;
+}
+
+.deadline-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+
+
+.deadline-card .fas {
+    transition: transform 0.3s ease-in-out;
+}
+
+.upload-section {
+    margin-top: 10px;
+}
+.upload-label {
+    background-color: #FABC32;
+    color: white;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+.checkbox {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    font-size: 16px;
+    user-select: none;
+}
+
+.checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #fff;
+    border: 2px solid #BDBDC1;
+    border-radius: 4px; /* Slightly rounded square for modern look */
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.checkbox:hover .checkmark {
+    border-color: #FABC32;
+}
+
+.checkbox input:checked ~ .checkmark {
+    background-color: #FABC32;
+    border-color: #FABC32;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 3px;
+    width: 7px;
+    height: 12px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg) scale(0);
+    opacity: 0;
+    transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.checkbox input:checked ~ .checkmark:after {
+    opacity: 1;
+    transform: rotate(45deg) scale(1);
+    animation: check-bounce 0.4s ease-out;
+}
+
+@keyframes check-bounce {
+    0% {
+        transform: rotate(45deg) scale(0);
+    }
+    70% {
+        transform: rotate(45deg) scale(1.3);
+    }
+    100% {
+        transform: rotate(45deg) scale(1);
+    }
+}

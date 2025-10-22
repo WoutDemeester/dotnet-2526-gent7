@@ -1,0 +1,32 @@
+<div>
+    <MudMenu
+        Icon="@Icons.Material.Filled.Menu"
+        Color="Color.Inherit"
+        Dense="true"
+        Elevation="0"
+        Style="background-color: #000000; color: white; border-radius: 0; padding: 0">
+
+
+        <MudMenuItem Href="instellingen" Style="background-color: #000000; color:white; padding: 8px 16px;">App-Instellingen</MudMenuItem>
+        <MudMenuItem Href="it-support" Style="background-color: #000000; color:white; padding: 8px 16px;">IT-Support</MudMenuItem>
+        <MudMenuItem Href="contact" Style="background-color: #000000; color:white; padding: 8px 16px;">Contact & Hulp</MudMenuItem>
+
+        <MudDivider Style="margin: 0; background-color: #000; color:white;"/>
+
+        <MudMenuItem Style="color:white; background-color: #000000; padding: 8px 16px;">NL | EN</MudMenuItem>
+
+        <MudDivider Style="color:white; margin: 0; background-color: #000;"/>
+
+        <AuthorizeView>
+            <Authorized>
+                <MudText Style="color:white; background-color: #000000; padding: 0 16px; font-weight: 500;">
+                    @context.User.Identity?.Name
+                </MudText>
+                <MudMenuItem Href="logout" Style="color:white; background-color: #000000; padding: 8px 16px;">Logout</MudMenuItem>
+            </Authorized>
+            <NotAuthorized>
+                <MudMenuItem Href="login" Style="color:white; background-color: #000000; padding: 8px 16px;">Login</MudMenuItem>
+            </NotAuthorized>
+        </AuthorizeView>
+    </MudMenu>
+</div>

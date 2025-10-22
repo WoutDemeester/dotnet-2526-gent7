@@ -1,0 +1,20 @@
+@using System.Globalization
+
+<div class="event-card" style="background-image: url('@Event.ImageUrl');">
+    <div class="event-gradient-overlay"></div>
+    <div class="event-content">
+        <DateBlock Date="@Event.Date" MonthFormat="MMM" />
+        <div class="event-info">
+            <h3>@Event.Title</h3>
+            <a href="@Event.LinkUrl">
+                Lees meer
+                <MudIcon Icon="@Icons.Material.Outlined.ArrowRightAlt" Title="Arrow" />
+            </a>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public (string Title, DateTime Date, string ImageUrl, string LinkUrl) Event { get; set; }
+}

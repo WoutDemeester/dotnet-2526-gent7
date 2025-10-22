@@ -1,0 +1,36 @@
+<div>
+    <MudCarousel Class="mud-width-full event-carousel"
+                 TData="object"
+                 ShowArrows="false">
+
+        <BulletTemplate Context="selected">
+            <div class="carousel-bullet @(selected ? "selected" : "")"></div>
+        </BulletTemplate>
+
+        <ChildContent>
+            @if (News is not null)
+            {
+                @foreach (var article in News)
+                {
+                    <MudCarouselItem Class="event-carousel-item" Transition="Transition.Slide">
+                        <div class="carousel-item-content" style="background-image: url('@article.ImageUrl');">
+                            <div class="gradient-overlay"></div>
+                            <div class="carousel-text">
+                                <h3>@article.Title</h3>
+                                <a href="@article.LinkUrl">
+                                    Lees meer
+                                    <MudIcon Icon="@Icons.Material.Outlined.ArrowRightAlt" Title="Arrow" />
+                                </a>
+                            </div>
+                        </div>
+                    </MudCarouselItem>
+                }
+            }
+        </ChildContent>
+    </MudCarousel>
+</div>
+
+@code {
+    [Parameter]
+    public (string Title, string ImageUrl, string LinkUrl)[]? News { get; set;  }
+}

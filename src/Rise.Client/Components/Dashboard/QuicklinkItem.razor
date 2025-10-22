@@ -1,0 +1,22 @@
+<a href="@LinkUrl">
+    <div class="quicklink-item">
+        <div class="quicklink-icon">
+            @if (!string.IsNullOrEmpty(Icon))
+            {
+                <span><MudIcon Icon="@Icon" Title="@Label" Size="Size.Large" /></span>
+            }
+            else
+            {
+                <span>@Label</span>
+            }
+        </div>
+        <p>@Title</p>
+    </div>
+</a>
+
+@code {
+    [Parameter] public string Title { get; set; } = string.Empty;
+    [Parameter] public string? Icon { get; set; }
+    [Parameter] public string? Label { get; set; }
+    [Parameter] public string LinkUrl { get; set; } = "#";
+}

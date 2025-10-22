@@ -1,0 +1,79 @@
+    @page "/login"
+
+    <PageTitle>Login</PageTitle>
+
+    <AuthorizeView>
+        <Authorized Context="authContext">
+            <div class="notification">You're logged in as @authContext.User.Identity?.Name.</div>
+            <div><strong>With the following claims:</strong>
+                <table class="table is-fullwidth is-narrow">
+                    <thead>
+                        <tr>
+                            <th>Type</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var claim in authContext.User.Claims)
+                        {
+                            <tr>    
+                                <td>@claim.Type</td>
+                                <td>@claim.Value</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </Authorized>
+        <NotAuthorized>
+            <div class="container">
+                <div class="columns is-mobile is-multiline">
+                    <div class="column is-12-mobile is-8-desktop">
+                        <figure class="image" style="margin: 0;">
+                            <img src="image1.png" alt="Young couple on bench" style="width: 100%; height: auto; display: block;" />
+                        </figure>
+                    </div>
+                    <div class="column is-12-mobile is-4-desktop">
+                        <div class="login-container" style="background-color: #ffffff; padding: 2rem;">
+                            @foreach (var error in _result.Errors)
+                            {
+                                <div class="notification is-danger">@error</div>
+                            }
+                            <h1 class="title">Log in</h1>
+                            <EditForm Model="Model" OnValidSubmit="LoginUser" Context="formContext">
+                                <FluentValidationValidator />
+                                <div class="field">
+                                    <label class="label">Email</label>
+                                    <div class="control has-icons-left">
+                                        <InputText @bind-Value="Model.Email" type="email" autocomplete="username" class="input" />
+                                        <span class="icon is-left">
+                                            <i class="fas fa-envelope"></i>
+                                        </span>
+                                    </div>
+                                    <ValidationMessage For="() => Model.Email" class="has-text-danger" />
+                                </div>
+                                <div class="field">
+                                    <label class="label">Wachtwoord</label>
+                                    <div class="control has-icons-left">
+                                        <InputText @bind-Value="Model.Password" class="input" type="password" />
+                                        <span class="icon is-left">
+                                            <i class="fas fa-lock"></i>
+                                        </span>
+                                    </div>
+                                    <ValidationMessage For="() => Model.Password" class="has-text-danger" />
+                                </div>
+                                <div class="field">
+                                    <div class="control">
+                                        <button type="submit" class="button is-black is-fullwidth">Inloggen</button>
+                                    </div>
+                                </div>
+                            </EditForm>
+                            <p class="has-text-centered" style="margin-top: 20px;">
+                                <a href="/" style="text-decoration: underline;"><i class="fas fa-user"></i> Ga door als <strong>Gast</strong></a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </NotAuthorized>
+    </AuthorizeView>

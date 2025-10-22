@@ -1,0 +1,216 @@
+﻿@page "/"
+@using Rise.Client.Components.Dashboard
+@using Rise.Shared.Deadlines
+@using Rise.Client.Deadlines
+<PageTitle>Home</PageTitle>
+
+<div>
+    <MudGrid Class="mx-auto" Spacing="0" >
+        <MudItem xs="12" lg="8" Class="left-column">
+            <MudGrid>
+                <!-- NEWS CAROUSSEL -->
+                <MudItem xs="12"><NewsCarousel News="_news"/></MudItem>
+                
+                <!-- QUICKLINKS SECTION -->
+                <MudItem xs="12" Class="my-0 pb-0">
+                    @if (_alert is not null)
+                    {
+                        <AlertSection Alert="_alert"/>
+                    }
+                    
+                    <div class="quicklinks-section">
+                        <div class="quicklinks-header">
+                            <h3>Mijn snelkoppelingen</h3>
+                            <a href="#"><MudIcon Icon="@Icons.Material.Rounded.Edit" Title="Edit"/></a>
+                        </div>
+                        <div class="quicklinks-grid">
+                            @if (_quicklinks is { Length: > 0 })
+                            {
+                                @foreach (var link in _quicklinks)
+                                {
+                                    <QuicklinkItem Title="@link.Title"
+                                                   Icon="@link.Icon"
+                                                   Label="@link.Label"
+                                                   LinkUrl="@link.LinkUrl"/>
+                                }
+                            }
+                            else
+                            {
+                                <p>Geen snelkoppelingen gevonden.</p>
+                            }
+                        </div>
+                    </div>
+                </MudItem>
+                
+                <!-- CLASS SCHEDULE -->
+                <MudItem xs="12" lg="6">
+                    <div class="class-schedule-section">
+                        <h3>Volgende les</h3>
+
+                        @foreach (var course in _courses)
+                        {
+                            <ClassScheduleBlock Course="course"/>
+                        }
+                    </div>
+                    @if (_absence is { Count: > 0 })
+                    {
+                        <AbscenceAlert Abscences="_absence"/>
+                    }
+                </MudItem>
+                
+                <!-- DEADLINES SECTION -->
+                <MudItem xs="12" lg="6">
+                    <div class="deadlines-section">
+                        <h3>Mijn deadlines</h3>
+                        
+                        @foreach (var deadline in _deadlines)
+                        {
+                            <div class="deadline-inline">
+                                <DeadlineBlock Deadline="deadline" OnCompletedChanged="UpdateUi"  />
+                            </div>
+                        }
+                    </div>
+                </MudItem>
+                
+                <!-- EVENTS SECTION -->
+                <MudItem xs="12">
+                    <div class="events-section">
+                        @if (_events is { Length: > 0 })
+                        {
+                            @foreach (var evt in _events)
+                            {
+                                <EventCard Event="evt"/>
+                            }
+                        }
+                        else
+                        {
+                            <p>Geen evenementen gevonden.</p>
+                        }
+                    </div>
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+        <MudItem xs="12" lg="4" Class="right-column">
+            <!-- ANNOUNCEMENTS SECTION -->
+            <div class="announcements-section">
+                @foreach (var announcement in _announcements)
+                {
+                    <OrionAnnouncement Announcement="announcement"/>
+                }
+            </div>
+        </MudItem>
+        @*<MudItem xs="12">
+            <div class="announcements-section mx-0">
+                <QuicklinksAccordion Sections="_quicklinkSections"/>
+            </div>
+        </MudItem>*@
+    </MudGrid>
+</div>
+
+@code {
+    // News carousel
+    private readonly (string Title, string ImageUrl, string LinkUrl)[] _news =
+    [
+        ("Gezellig smullen aan tafel van 100 meter.", "image1.jpg", "#"),
+        ("Nog een heerlijke tafel van 100 meter.", "image1.png", "#"),
+    ];
+
+    // Class schedule
+    private readonly (string Course, DateTime Start, DateTime End, string Room, string Type)[] _courses = 
+    [
+        ("RISE", new DateTime(2025, 10, 25, 12, 30, 0), new DateTime(2025, 10, 25, 18, 30, 0), "GSCHT0.026", "Hoorcollege"),
+    ];
+
+    // Quick links
+    private readonly (string Title, string? Icon, string? Label, string LinkUrl)[] _quicklinks = 
+    [
+        ("Ibamaflex", null, "IB", "#"),
+        ("Teams", Icons.Material.Filled.Group, null, "#"),
+        ("E-mail", Icons.Material.Filled.Email, null, "#"),
+        ("SharePoint", Icons.Material.Filled.Group, null, "#"),
+        ("Orion", Icons.Material.Filled.Book, null, "#")
+    ];
+
+    // Events
+    private readonly (string Title, DateTime Date, string ImageUrl, string LinkUrl)[] _events = 
+    [
+        ("Gezellig smullen aan tafel van 100 meter.", new DateTime(2025, 10, 25, 18, 30, 0), "image1.png", "#"),
+        ("Gezellig smullen aan tafel van 100 meter.", new DateTime(2025, 10, 25, 18, 30, 0), "image1.png", "#"),
+        ("Gezellig smullen aan tafel van 100 meter.", new DateTime(2025, 10, 25, 18, 30, 0), "image1.png", "#"),
+    ];
+
+    // Deadlines (now dynamic, fetched in .cs file)
+    private List<DeadlineDto.Index> _deadlines = new();
+
+    // Announcements
+    private readonly (string Title, string Cursus, string Description, string LinkUrl)[] _announcements = 
+    [
+        ("Titel van een aankondiging", "Cursus", "Dit is een beschrijving van een aankondiging. Deze kan meerdere lijnen bevatten.", "#"),
+        ("Titel van een aankondiging", "Cursus", "Dit is een beschrijving van een aankondiging. Deze kan meerdere lijnen bevatten.", "#"),
+    ];
+
+    // All quick links
+    private readonly List<QuicklinksAccordion.QuickLinkSection> _quicklinkSections = 
+    [
+        // Roosters & Kalenders
+        new("Roosters & Kalenders", [
+            new("Lessenrooster", Icons.Material.Filled.CalendarMonth, null, "#FABC32", "#"),
+            new("Examenrooster", Icons.Material.Filled.DateRange, null, "#75B9E3", "#"),
+            new("Academische kalender", Icons.Material.Filled.Event, null, "#FFAFBD", "#"),
+            new("Weekmenu", Icons.Material.Filled.RestaurantMenu, null, "#75B9E3", "resto"),
+        ]),
+
+        // Studiediensten
+        new("Studiediensten", [
+            new("Orion", Icons.Material.Filled.School, null, "#FABC32", "#"),
+            new("Wallie", Icons.Material.Filled.Info, null, "#FFAFBD", "#"),
+            new("IBamaflex", null, "IB", "#75B9E3", "#"),
+            new("Ans", Icons.Material.Filled.Description, null, "#FABC32", "#"),
+            new("exam.hogent.be", Icons.Material.Filled.Assignment, null, "#75B9E3", "#"),
+            new("Academic Software", Icons.Material.Filled.Computer, null, "#FFAFBD", "#"),
+        ]),
+
+        // Communicatie & Software
+        new("Communicatie & Software", [
+            new("Teams", Icons.Material.Filled.Group, null, "#75B9E3", "#"),
+            new("Panopto", Icons.Material.Filled.PlayCircle, null, "#FABC32", "#"),
+            new("E-mail", Icons.Material.Filled.Email, null, "#FFAFBD", "#"),
+            new("OneDrive", Icons.Material.Filled.Cloud, null, "#75B9E3", "#"),
+            new("Word", Icons.Material.Filled.TextFields, null, "#FFAFBD", "#"),
+            new("Excel", Icons.Material.Filled.TableChart, null, "#75B9E3", "#"),
+            new("PowerPoint", Icons.Material.Filled.Slideshow, null, "#FABC32", "#"),
+            new("OneNote", Icons.Material.Filled.StickyNote2, null, "#FFAFBD", "#"),
+            new("Forms", Icons.Material.Filled.Description, null, "#FABC32", "#"),
+        ]),
+
+        // Ondersteuning / IT
+        new("Ondersteuning / IT", [
+            new("IT helpdesk", Icons.Material.Filled.SupportAgent, null, "#75B9E3", "#"),
+        ]),
+
+        // Studentenleven & Welzijn
+        new("Studentenleven & Welzijn", [
+            new("Eerste hulp bij ongevallen", Icons.Material.Filled.MedicalServices, null, "#FFAFBD", "#"),
+            new("Vertrouwenspersoon", Icons.Material.Filled.Favorite, null, "#FABC32", "#"),
+            new("Ongeval melden", Icons.Material.Filled.Warning, null, "#FFAFBD", "#"),
+            new("Veiligheid / Gezondheid", Icons.Material.Filled.HealthAndSafety, null, "#75B9E3", "#"),
+            new("BIB HOGENT", Icons.Material.Filled.LocalLibrary, null, "#FABC32", "#"),
+            new("Campus Shop", Icons.Material.Filled.ShoppingCart, null, "#FFAFBD", "#"),
+            new("Mobiel printen", Icons.Material.Filled.Print, null, "#75B9E3", "#"),
+        ]),
+
+        // Meldingen & Afwezigheid
+        new("Meldingen & Afwezigheid", [
+            new("Afwezigheid lesgevers", Icons.Material.Filled.PersonOff, null, "#FABC32", "#"),
+            new("Afwezigheid melden", Icons.Material.Filled.Report, null, "#FFAFBD", "#"),
+        ]),
+    ];
+
+    // Alert
+    /*private readonly (string Title, string Message, Severity Severity)? _alert;*/
+    private readonly (string Title, string Message, Severity Severity)? _alert = 
+        ("Nieuwe mededeling", "Bekijk de nieuwe aankondigingen van je lectoren.", Severity.Error);
+    
+    // Teacher sick
+    private readonly List<string>? _absence = [ "Dhr. Labijn", "Mevr. Peeters" ];
+}

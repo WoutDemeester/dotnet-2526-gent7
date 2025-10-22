@@ -1,0 +1,14 @@
+@using System.Globalization
+
+<div class="class-schedule-day">
+    <p>@Date.ToString(MonthFormat, CultureInfo.InvariantCulture)</p>
+    <p>@Date.Day</p>
+</div>
+
+@code {
+    [Parameter]
+    public DateTime Date { get; set; }
+
+    [Parameter]
+    public string MonthFormat { get; set; } = "ddd";
+}

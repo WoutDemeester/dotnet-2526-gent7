@@ -1,0 +1,94 @@
+@page "/deadlines"
+@using Rise.Shared.Deadlines
+@using Rise.Shared.Common
+@inject AuthenticationStateProvider AuthProvider
+@inject IDeadlineService DeadlineService
+
+<PageTitle>Deadlines</PageTitle>
+
+@if (!isAuthenticated)
+{
+    <section class="section mx-5 pt-5">
+        <div class="container">
+            <h1 class="title">Deadlines</h1>
+            <p>Please log in to view your deadlines.</p>
+        </div>
+    </section>
+}
+else
+{
+    <section class="section mx-5 pt-5">
+        <div class="container">
+            <h1 class="title">Deadlines</h1>
+            <!-- Search control -->
+            <div class="field">
+                <label class="subtitle">Search</label>
+                <div class="control has-icons-left">
+                    <input class="input" type="text" placeholder="Search by title or course" @bind="searchQuery" @bind:event="oninput" />
+                    <span class="icon is-left search-icon">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Filter and Sort controls -->
+            <div class="field is-grouped">
+                <div class="control is-expanded">
+                    <label class="label subtitle">Course</label>
+                    <div class="select is-fullwidth">
+                        <select @bind="selectedCourse">
+                            <option value="">All Courses</option>
+                            @foreach (var course in Courses)
+                            {
+                                <option value="@course">@course</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="control is-expanded">
+                    <label class="label subtitle">Sort</label>
+                    <div class="select is-fullwidth">
+                        <select @bind="sortOption">
+                            <option value="DateAscending">By date (asc)</option>
+                            <option value="DateDescending">By date (desc)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upcoming Deadlines section -->
+            <h2 class="subtitle">@UpcomingDeadlines.Count() Upcoming deadlines</h2>
+            <div class="columns is-multiline">
+                @foreach (var deadline in UpcomingDeadlines)
+                {
+                    <div class="column is-full-mobile is-half-tablet is-one-third-desktop" @key="deadline.Id">
+                        <DeadlineBlock Deadline="deadline" OnCompletedChanged="UpdateUI" />
+                    </div>
+                }
+                @if (!UpcomingDeadlines.Any())
+                {
+                    <div class="column">
+                        <p class="has-text-centered has-text-grey">No upcoming deadlines</p>
+                    </div>
+                }
+            </div>
+
+            <!-- Completed Deadlines section -->
+            <h2 class="subtitle">Completed Deadlines</h2>
+            <div class="columns is-multiline">
+                @foreach (var deadline in CompletedDeadlines)
+                {
+                    <div class="column is-full-mobile is-half-tablet is-one-third-desktop" @key="deadline.Id">
+                        <DeadlineBlock Deadline="deadline" OnCompletedChanged="UpdateUI" />
+                    </div>
+                }
+                @if (!CompletedDeadlines.Any())
+                {
+                    <div class="column">
+                        <p class="has-text-centered has-text-grey">No completed deadlines match your search.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+}

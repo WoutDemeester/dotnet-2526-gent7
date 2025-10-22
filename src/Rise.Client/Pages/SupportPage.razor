@@ -1,0 +1,89 @@
+@using Rise.Client.Components.Common
+@using Rise.Shared.Support
+@page "/it-support"
+@inject ISupportService SupportService
+
+<PageTitle>IT-Support</PageTitle>
+
+<div class="container">
+    <div class="block">
+        <h1>IT-support</h1>
+    </div>
+
+    <div class="block">
+        <img src="Images/logo_RITA.png" alt="Logo RITA"/>
+    </div>
+
+    <div class="block">
+        <p>Heb je problemen met aanmelden met het HOGENT-netwerk? Of heb je vragen over de werking van Chamilo, OneDrive
+            of andere applicatie op je digitale werkplek?</p>
+    </div>
+
+    <div class="block">
+        <p>Geen nood. Onze IT-support staat voor je klaar. Aarzel zeker niet om contact op te nemen.</p>
+    </div>
+
+    <div class="hours-card">
+        @if (_support != null)
+        {
+            <h3>Openingsuren</h3>
+
+            <div class="opening-hours">
+                <ul>
+                    @foreach (var oh in _support.OpeningHours)
+                    {
+                        <li>@oh.Day: @oh.Open - @oh.Close</li>
+                    }
+                </ul>
+            </div>
+            <div class="status-badge" style="color:@(IsOpen() ? "limegreen" : "grey")">
+                @(IsOpen() ? "Open" : "Gesloten")
+            </div>
+        }
+        else
+        {
+            <p>Loading...</p>
+        }
+    </div>
+
+    <div class="block cta-buttons">
+        <CommonLinkButton
+            Text="Stuur een e-mail"
+            Icon="@Icons.Material.Outlined.Mail"
+            Href="mailto:rita@hogent.be"/>
+
+        <CommonLinkButton
+            Text="Bekijk onze website"
+            Icon="@Icons.Material.Outlined.Language"
+            Href="https://revolte.gent/rita/"
+            Target="_blank"/>
+    </div>
+
+</div>
+
+@code {
+    private SupportDto.Index? _support;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await SupportService.GetByNameAsync("Rita");
+        if (result.IsSuccess)
+            _support = result.Value.support;
+    }
+
+    private bool IsOpen()
+    {
+        if (_support == null) return false;
+
+        var brusselsTime = TimeZoneInfo.ConvertTimeBySystemTimeZoneId(DateTime.UtcNow, "Europe/Brussels");
+        var todayHours = _support.OpeningHours.FirstOrDefault(h => h.Day == brusselsTime.DayOfWeek);
+        if (todayHours == null) return false;
+
+        var now = brusselsTime.TimeOfDay;
+        var openTime = TimeSpan.Parse(todayHours.Open);
+        var closeTime = TimeSpan.Parse(todayHours.Close);
+
+        return now >= openTime && now <= closeTime;
+    }
+
+}

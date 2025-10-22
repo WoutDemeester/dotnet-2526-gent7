@@ -1,0 +1,27 @@
+html, body, main {
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.full-height-section {
+    height: 100%;
+    min-height: 100%;
+    box-sizing: border-box;
+    background: inherit;
+}
+
+main {
+    margin-top: 64px;
+}
+
+main section {
+    padding-top: 0;
+}
+
+@media (max-width: 1279px) {
+    main {
+        margin-bottom: 80px;
+    };
+}

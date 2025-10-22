@@ -1,0 +1,33 @@
+<!-- DeadlineBlock.razor -->
+@using Rise.Shared.Deadlines
+@using Rise.Client.Components.Dashboard
+@inject IDeadlineService DeadlineService
+
+<div class="deadline-card @(IsExpanded ? "expanded" : "") @(IsCompleting ? "completing" : "") @(IsLoading ? "loading" : "")">
+    <div class="event-content" @onclick="ToggleExpand">
+        <DateBlock Date="@Deadline.DueDate" MonthFormat="MMM" />
+        <div class="deadline-info">
+            <div class="deadline-text">
+                <p>@Deadline.Course</p>
+                <h3 style="@(Deadline.IsCompleted ? "text-decoration: line-through;" : "")">@Deadline.Title</h3>
+            </div>
+            <i class="@(IsExpanded ? "fas fa-chevron-down" : "fas fa-chevron-right") ml-auto"></i>
+        </div>
+    </div>
+    <div class="deadline-description">
+        <p><strong>Since:</strong> @Deadline.StartDate.ToString("MMM dd, yyyy")</p>
+        <p><strong>Due:</strong> @Deadline.DueDate.ToString("MMM dd, yyyy")</p>
+        <p>@Deadline.Description</p>
+        <div class="deadline-footer">
+            <label class="upload-label">
+                <button  hidden />
+                Upload File
+            </label>
+            <label class="checkbox">
+                <input type="checkbox" checked="@Deadline.IsCompleted" disabled="@IsLoading" @onchange="HandleChange"/>
+                <span class="checkmark"></span>
+                Mark as done
+            </label>
+        </div>
+    </div>
+</div>

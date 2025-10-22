@@ -1,0 +1,142 @@
+/*Standaard mobile*/
+h1 {
+    font-size: 1.5em;
+    padding-top: 0.5em;
+}
+
+h3{
+    color: white;
+}
+
+p {
+    font-size: 1em;
+}
+
+a {
+    text-decoration: underline;
+    color: white;
+    font-size: 1.5em;
+    padding: 0.5em;
+}
+
+img {
+    max-width: 350px;
+    width: 100%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+    padding: 0.5em;
+}
+
+.container > .block:last-child {
+    margin-bottom: 100px;
+}
+
+.block {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.block p {
+    padding-left: 1em;
+}
+
+.hours-card {
+    border: 1px solid #000000;
+    background-color: #000000;
+    color: white;
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 1em;
+}
+
+.opening-hours {
+    display: flex;
+    justify-content: center;
+}
+
+.opening-hours ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: left;
+}
+
+.icon-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.block.cta-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    width: 100%;
+    max-width: 350px;
+}
+
+.button-link {
+    background-color: #000000;
+    color: white;
+    text-align: center;
+    padding: 0.75em;
+    text-decoration: underline;
+}
+
+.block,
+.hours-card {
+    margin-bottom: 1em;
+}
+
+.status-badge {
+    font-weight: bold;
+    font-size: 1.2em;
+    padding: 0.3em 0.6em;
+    border-radius: 0.3em;
+    margin-bottom: 0.5em;
+}
+
+/*Desktop*/
+@media (min-width: 500px) {
+    .container {
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 2em;
+    }
+
+    .hours-card, img {
+        width: 400px;
+        max-width: 400px;
+    }
+
+    h1 {
+        font-size: 2em;
+    }
+
+    p {
+        font-size: 1.2em;
+    }
+
+    .button-link {
+        font-size: 1.4em;
+        padding: 0.8em 3em;
+    }
+
+    .block,
+    .hours-card {
+        margin-bottom: 0.3em;
+    }
+}

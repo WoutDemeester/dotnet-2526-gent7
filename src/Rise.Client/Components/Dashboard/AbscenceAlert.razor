@@ -1,0 +1,11 @@
+<div class="alert-section">
+    <MudAlert Severity="Severity.Info">
+        <span>Afwezigheden</span><br/> 
+        @string.Join(", ", Abscences ?? Enumerable.Empty<string>()) @( (Abscences?.Count ?? 0) == 1 ? "is" : "zijn" ) vandaag afwezig.
+    </MudAlert>
+</div>
+
+@code {
+    [Parameter]
+    public List<string>? Abscences { get; set; }
+}

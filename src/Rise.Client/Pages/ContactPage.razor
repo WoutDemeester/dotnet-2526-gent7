@@ -1,0 +1,169 @@
+@page "/contact"
+@using Microsoft.Extensions.Logging
+@using Rise.Shared.Common
+@using Rise.Shared.Departments
+@using Rise.Shared.Users
+
+@inject IDepartmentService DepartmentService
+
+<PageTitle>Contact</PageTitle>
+
+<div class="container p-4 pb-20">
+    <div class="columns is-mobile is-multiline">
+        <div class="column is-12">
+
+            @if (_currentDepartment == null)
+            {
+                <h1 class="title has-text-centered mb-5">Contact</h1>
+            }
+            else
+            {
+                <a @onclick="BackToOverview" class="is-size-6 has-text-black is-underlined mb-4" role="button"
+                   aria-label="Terug naar overzicht">
+                    <span class="icon mr-1"><i class="fas fa-arrow-left"></i></span>
+                    Terug
+                </a>
+
+                <h2 class="title is-3 has-text-centered mb-6">
+                    @_currentDepartment.Name
+                </h2>
+
+                @if (_managers.Any())
+                {
+                    <div class="columns is-multiline">
+                        @foreach (var manager in _managers)
+                        {
+                            <div class="column is-12-tablet is-6-desktop">
+                                <div class="box has-background-light p-5" style="border-radius: 10px;">
+                                    <p class="is-size-5 has-text-weight-semibold mb-2">
+                                        <span class="icon mr-2"><i class="fas fa-user"></i></span>
+                                        @manager.FirstName @manager.LastName
+                                    </p>
+
+                                    @if (!string.IsNullOrWhiteSpace(manager.Title))
+                                    {
+                                        <p class="is-size-6 has-text-grey mb-2">@manager.Title</p>
+                                    }
+
+                                    @if (!string.IsNullOrWhiteSpace(manager.Email))
+                                    {
+                                        <p class="is-size-6">
+                                            <span class="icon mr-1 has-text-grey"><i class="fas fa-envelope"></i></span>
+                                            <a href="mailto:@manager.Email" class="has-text-link">@manager.Email</a>
+                                        </p>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="notification is-info p-4">Geen contactpersonen gevonden voor dit departement.</p>
+                }
+            }
+
+            @if (_currentDepartment == null)
+            {
+                <div class="mt-6">
+                    <h4 class="subtitle is-4 mb-3">Departementen, GOS en KASK & Conservatorium</h4>
+                    <nav class="panel mb-6">
+                        @foreach (var dept in _department)
+                        {
+                            <a class="panel-block" @onclick="() => SetDepartment(dept)"
+                               style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" role="button">
+                                @dept.Name
+                                <span class="icon has-text-grey ml-auto"><i class="fas fa-chevron-right"></i></span>
+                            </a>
+                        }
+                    </nav>
+
+                    <h4 class="subtitle is-4 mb-3">Directies</h4>
+                    <nav class="panel mb-6">
+                        @foreach (var dept in _management)
+                        {
+                            <a class="panel-block" @onclick="() => SetDepartment(dept)"
+                               style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" role="button">
+                                @dept.Name
+                                <span class="icon has-text-grey ml-auto"><i class="fas fa-chevron-right"></i></span>
+                            </a>
+                        }
+                    </nav>
+
+                    <h4 class="subtitle is-4 mb-3">Andere</h4>
+                    <nav class="panel">
+                        @foreach (var dept in _other)
+                        {
+                            <a class="panel-block" @onclick="() => SetDepartment(dept)"
+                               style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" role="button">
+                                @dept.Name
+                                <span class="icon has-text-grey ml-auto"><i class="fas fa-chevron-right"></i></span>
+                            </a>
+                        }
+                    </nav>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private IEnumerable<DepartmentDto.Index> _department = Enumerable.Empty<DepartmentDto.Index>();
+    private IEnumerable<DepartmentDto.Index> _management = Enumerable.Empty<DepartmentDto.Index>();
+    private IEnumerable<DepartmentDto.Index> _other = Enumerable.Empty<DepartmentDto.Index>();
+
+    private List<UserDto.Index> _managers = new();
+    private DepartmentDto.Index? _currentDepartment;
+
+    private async Task FetchDepartment()
+    {
+        try
+        {
+            var request = new QueryRequest.SkipTake { Skip = 0 };
+            var result = await DepartmentService.GetIndexAsync(request);
+
+            var allDepartments = result?.IsSuccess == true && result.Value.Departments != null
+                ? result.Value.Departments
+                : Enumerable.Empty<DepartmentDto.Index>();
+
+            _department = allDepartments.Where(d => d.DepartmentType == "Department");
+            _management = allDepartments.Where(d => d.DepartmentType == "Management");
+            _other = allDepartments.Where(d => d.DepartmentType == "Other");
+        }
+        catch
+        {
+            _department = Enumerable.Empty<DepartmentDto.Index>();
+            _management = Enumerable.Empty<DepartmentDto.Index>();
+            _other = Enumerable.Empty<DepartmentDto.Index>();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await FetchDepartment();
+        }
+        catch
+        {
+            Console.WriteLine("Er is een fout opgetreden bij het laden van de departementen. Probeer het later opnieuw.");
+        }
+    }
+
+    private void SetDepartment(DepartmentDto.Index dept)
+    {
+        _currentDepartment = dept;
+        _managers.Clear();
+
+        if (dept.Manager != null)
+        {
+            _managers.Add(dept.Manager);
+        }
+    }
+
+    private void BackToOverview()
+    {
+        _currentDepartment = null;
+        _managers.Clear();
+    }
+}

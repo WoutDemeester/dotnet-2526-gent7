@@ -1,0 +1,14 @@
+<div class="alert-section">
+    @if (Alert.HasValue)
+    {
+        <MudAlert Severity="@Alert.Value.Severity">
+            <span>@Alert.Value.Title</span><br />
+            @Alert.Value.Message
+        </MudAlert>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public (string Title, string Message, Severity Severity)? Alert { get; set; }
+}

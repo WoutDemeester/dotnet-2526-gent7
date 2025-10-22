@@ -1,0 +1,51 @@
+﻿@inherits LayoutComponentBase
+
+<div>
+    @* MudBlazor components *@
+    @* Required *@
+    <MudThemeProvider Theme="_myCustomTheme"/>
+    <MudPopoverProvider/>
+
+    @* Needed for dialogs *@
+    <MudDialogProvider/>
+
+    @* Needed for snackbars *@
+    <MudSnackbarProvider/>
+
+    <NavBar/>
+    <main>
+        <section class="section full-height-section">
+            @Body
+        </section>
+    </main>
+    <BottomNav/>
+    <Footer/>
+</div>
+
+@code{
+    MudTheme _myCustomTheme = new MudTheme()
+    {
+        PaletteLight = new PaletteLight()
+        {
+            Primary = "#000000",
+            Secondary = "#FABC32",
+            AppbarBackground = "#000000"
+        },
+        PaletteDark = new PaletteDark()
+        {
+            Primary = "#000000",
+            Secondary = "#FABC32"
+        },
+        LayoutProperties = new LayoutProperties()
+        {
+            AppbarHeight = "64px"
+        },
+        Typography = new Typography()
+        {
+            Default = new DefaultTypography()
+            {
+                FontFamily = ["Montserrat", "sans-serif"]
+            },
+        }
+    };
+}

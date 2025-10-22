@@ -1,0 +1,15 @@
+<div class="announcement-block">
+    <p>@Announcement.Cursus</p>
+    <h3>@Announcement.Title</h3>
+    <p>@Announcement.Description</p>
+    <a href="@Announcement.LinkUrl">
+        Lees meer
+        <MudIcon Icon="@Icons.Material.Outlined.ArrowRightAlt" Title="Arrow"/>
+    </a>
+</div>
+
+
+@code {
+    [Parameter]
+    public (string Title, string Cursus, string Description, string LinkUrl) Announcement { get; set; }
+}

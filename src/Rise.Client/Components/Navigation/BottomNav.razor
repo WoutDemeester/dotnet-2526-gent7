@@ -1,0 +1,70 @@
+@inject NavigationManager Navigation
+@implements IDisposable
+
+<div>
+    <MudHidden Breakpoint="Breakpoint.LgAndUp">
+        <MudPaper Class="mud-width-full bottom-nav-paper" Elevation="8">
+            <MudGrid Spacing="0" Justify="Justify.SpaceEvenly" Class="bottom-nav-grid d-flex align-items-center">
+                @foreach (var item in navItems)
+                {
+                    bool isActive = activeHref == item.Href;
+                    string color = isActive ? "white" : "#b0b0b0";
+                    string style = "color:" + color + ";";
+
+                    <MudItem xs="2" Class="text-center bottom-nav-item">
+                        <MudNavLink Href="@item.Href"
+                                    OnClick="@(() => SetActive(item.Href))"
+                                    Class="bottom-nav-link"
+                                    Style="@style">
+                            <MudIcon Icon="@(isActive ? item.IconFilled : item.IconOutlined)" />
+                            <div>@item.Label</div>
+                        </MudNavLink>
+                    </MudItem>
+                }
+            </MudGrid>
+        </MudPaper>
+    </MudHidden>
+</div>
+
+@code {
+    private record NavItem(string Label, string Href, string IconOutlined, string IconFilled);
+
+    private readonly List<NavItem> navItems = new()
+    {
+        new("Home", "/", Icons.Material.Outlined.Home, Icons.Material.Filled.Home),
+        new("Nieuws", "nieuws", Icons.Material.Outlined.Article, Icons.Material.Filled.Article),
+        new("Campus", "campus", Icons.Material.Outlined.Explore, Icons.Material.Filled.Explore),
+        new("Rooster", "lessenrooster", Icons.Material.Outlined.CalendarMonth, Icons.Material.Filled.CalendarMonth),
+        new("Deadlines", "deadlines", Icons.Material.Outlined.Checklist, Icons.Material.Filled.Checklist)
+    };
+
+    private string activeHref = "/";
+
+    protected override void OnInitialized()
+    {
+        UpdateActiveHref();
+        Navigation.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        UpdateActiveHref();
+        StateHasChanged();
+    }
+
+    private void UpdateActiveHref()
+    {
+        var path = Navigation.ToBaseRelativePath(Navigation.Uri);
+        activeHref = string.IsNullOrEmpty(path) ? "/" : path;
+    }
+
+    private void SetActive(string href)
+    {
+        activeHref = href;
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+}

@@ -1,0 +1,15 @@
+@page "/nieuws"
+@using Rise.Client.Components.Nieuws
+@using Rise.Client.Components.Evenementen
+
+<div>
+    <MudTabs Centered="true">
+        <MudTabPanel Text="Nieuws">
+            <NewsContent/>
+        </MudTabPanel>
+
+        <MudTabPanel Text="Evenementen">
+            <EventContent/>
+        </MudTabPanel>
+    </MudTabs>
+</div>

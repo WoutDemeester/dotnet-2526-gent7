@@ -1,0 +1,18 @@
+/* Custom styles for controls */
+.input:focus,
+.select select:focus {
+    border-color: #FABC32 !important;
+    box-shadow: 0 0 0 0.125em rgba(250, 188, 50, 0.25) !important;
+}
+
+.icon.is-left {
+    color: #FABC32;
+}
+
+.select:not(.is-multiple):not(.is-loading)::after {
+    border-color: #FABC32 !important;
+}
+
+.search-icon {
+    color: #BDBDC1 !important;
+}

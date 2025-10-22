@@ -1,0 +1,189 @@
+/* 
+================================
+DASHBOARD OVERRIDE CSS
+================================
+*/
+
+.alert-section, .class-schedule-section, .deadlines-section {
+    margin: 30px;
+}
+
+.deadline-inline{
+    padding-bottom: 25px;
+}
+.announcements-section {
+    margin: 30px 50px 0;
+}
+
+.events-section {
+    margin: 10px 0 0;
+    display: flex;
+    gap: 10px;
+    overflow-x: auto;
+}
+
+.left-column, .right-column {
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-width: 1280px) {
+    .right-column {
+        background-color: #1a1a1a;
+    }
+
+    .events-section {
+        overflow-x: visible;
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 1279px) {
+    .announcements-section {
+        margin: 60px 30px 100px;
+    };
+}
+
+/* Alerts */
+
+.alert-section {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.alert-section span {
+    font-weight: 700;
+    padding-bottom: 10px;
+}
+
+/* Quick links */
+
+.quicklinks-section {
+    margin: 20px 0 0;
+}
+
+.quicklinks-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding: 30px;
+    background-color: #C9D2D9;
+}
+
+.quicklinks-header h3 {
+    font-weight: bold;
+    /*color: black;*/
+    color: white;
+}
+
+.quicklinks-header a {
+    font-size: 24px;
+    cursor: pointer;
+    color: white;
+    transition: color 0.2s;
+    margin-top: -5px;
+    height: 80px;
+}
+
+.quicklinks-grid {
+    display: flex;
+    gap: 10px;
+    padding: 0 15px;
+    margin: -60px 0 0 0;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    /*Scrollable on mobile*/
+    -webkit-overflow-scrolling: touch;
+}
+
+.quicklinks-grid::-webkit-scrollbar {
+    display: none; /* verberg de scrollbar */
+}
+
+/* Accordion */
+
+.mud-expansion-panels {
+    border-top: 1px solid #e0e0e0;
+}
+
+.mud-expand-panel {
+    border-bottom: 1px solid #e0e0e0 !important;
+    box-shadow: none !important;
+    margin: 0 !important;
+}
+
+.mud-expand-panel.expanded {
+    border-bottom: 1px solid #e0e0e0 !important;
+}
+
+.mud-expand-panel-content.mud-expand-panel-gutters {
+    padding: 0 !important;
+    border: none !important;
+    background-color: transparent !important;
+}
+
+.mud-expand-panel-header {
+    font-weight: 800;
+}
+
+.all-quicklinks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 10px;
+    row-gap: 30px;
+    padding: 20px 15px 50px;
+    margin: 0;
+}
+
+.all-quicklinks-grid .quicklink-icon {
+    background-color: white;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    padding-top: 10px;
+}
+
+.all-quicklinks-grid .quicklink-item p:last-of-type {
+    font-weight: 700;
+    font-size: 0.8rem;
+}
+
+/* 
+================================
+NEWS PAGE OVERRIDE CSS
+================================
+*/
+
+.mud-tabs {
+    padding: 20px 0 0;
+    font-size: 1rem;
+}
+
+.mud-tab.mud-tab-active {
+    font-weight: 700;
+}
+
+.mud-tab-slider {
+    background-color: var(--secondary-color) !important;
+}
+
+.mud-tabs-tabbar-wrapper {
+    display: flex !important;
+    width: 100% !important;
+    justify-content: stretch !important; /* override mud-tabs-centered */
+    gap: 0 !important;
+}
+
+.mud-tabs-tabbar-wrapper > .mud-tooltip-root {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    display: flex !important;
+}
+
+.mud-tabs-tabbar-wrapper > .mud-tooltip-root > .mud-tab {
+    width: 100% !important;
+    min-width: 0 !important;
+    flex: 1 1 0 !important;
+    display: flex !important;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+}

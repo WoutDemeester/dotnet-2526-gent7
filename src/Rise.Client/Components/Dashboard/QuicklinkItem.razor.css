@@ -1,0 +1,31 @@
+.quicklink-item {
+    flex: 0 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    gap: 15px;
+    color: black;
+    width: 120px;
+}
+
+.quicklink-icon {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--secondary-color);
+    background-color: white;
+    font-size: 40px;
+}
+
+.quicklink-icon span {
+    font-family: 'Code-Pro-Black', sans-serif;
+}
+
+.quicklink-item p:last-of-type {
+    font-weight: 700;
+}

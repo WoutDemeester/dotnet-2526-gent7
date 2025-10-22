@@ -1,0 +1,49 @@
+@* DESKTOP *@
+<MudHidden Breakpoint="Breakpoint.MdAndDown">
+    <header>
+        <MudAppBar Elevation="0" Style="z-index: 1000">
+            <MudIconButton Href="/" Edge="Edge.Start">
+                <img src="HOGENT_Logo_Wit.png" alt="HOGENT logo" style="height:38px;"/>
+            </MudIconButton>
+
+            <!-- Deze spacer duwt navlinks naar het midden -->
+            <MudSpacer/>
+
+            <div class="nav-links">
+                <MudNavLink Href="/" Match="NavLinkMatch.All">Home</MudNavLink>
+                <MudNavLink Href="nieuws">Nieuws</MudNavLink>
+                <MudNavLink Href="campus">Campus</MudNavLink>
+                <MudNavLink Href="lessenrooster">Rooster</MudNavLink>
+                <MudNavLink Href="deadlines">Deadlines</MudNavLink>
+            </div>
+
+            <!-- Deze spacer duwt belletje en dropdown naar rechts -->
+            <MudSpacer/>
+
+            <MudIconButton Href="notificaties" Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit"/>
+
+            <NavbarDropdown/>
+
+        </MudAppBar>
+    </header>
+</MudHidden>
+
+@* MOBILE *@
+<MudHidden Breakpoint="Breakpoint.LgAndUp">
+    <header>
+        <MudAppBar Elevation="0" Style="padding: 5px 0; z-index: 1000">
+            
+            <MudIconButton Href="/" Edge="Edge.Start">
+                <img src="HOGENT_Logo_Wit.png" alt="HOGENT logo" style="height:38px;"/>
+            </MudIconButton>
+            
+            <!-- Deze spacer duwt belletje en dropdown naar rechts -->
+            <MudSpacer />
+        
+            <MudIconButton Href="notificaties" Icon="@Icons.Material.Filled.Notifications" Color="Color.Inherit" />
+            
+            <NavbarHamburger />
+            
+        </MudAppBar>
+    </header>
+</MudHidden>
